@@ -1,6 +1,6 @@
-from aiogram import Bot, Dispatcher,Router
+from aiogram import Router, types
 from aiogram.filters import Command
-from aiogram import types
+
 
 start_router = Router()
 

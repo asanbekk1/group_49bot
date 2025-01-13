@@ -1,4 +1,4 @@
-from aiogram import Bot, Dispatcher, Router
+from aiogram import Router
 from aiogram.filters import Command
 from aiogram import types
 from random import choice
