@@ -13,3 +13,17 @@ kb = types.InlineKeyboardMarkup(inline_keyboard=[
 async def start_handler(message: types.Message):
     name = message.from_user.first_name
     await message.reply(f'Привет, {name}', reply_markup=kb)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
