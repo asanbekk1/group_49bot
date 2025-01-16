@@ -31,10 +31,10 @@ def cancel_keyboard():
     ])
 
 def init_db():
-    conn = sqlite3.connect('reviews.db')
+    conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS reviews (
+    CREATE TABLE IF NOT EXISTS database (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
         name TEXT,
@@ -95,10 +95,10 @@ async def process_visit_date(m: types.Message, state: FSMContext):
     await state.clear()
 
 def save_review(data, visit_date):
-    conn = sqlite3.connect('reviews.db')
+    conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     cursor.execute('''
-    INSERT INTO reviews (name, instagram_username, rating, extra_comments, visit_date)
+    INSERT INTO database (name, instagram_username, rating, extra_comments, visit_date)
     VALUES (?, ?, ?, ?, ?)
     ''', (data['name'], data['instagram_username'], data['rating'], data['extra_comments'], visit_date))
     conn.commit()
