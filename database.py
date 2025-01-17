@@ -1,6 +1,7 @@
 import sqlite3
 
 
+class Database:
 def init_db():
     conn = sqlite3.connect('reviews.db')
     cursor = conn.cursor()
