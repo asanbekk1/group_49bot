@@ -3,7 +3,6 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.filters import Command
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-import sqlite3
 from datetime import datetime
 
 review_router = Router()
@@ -14,6 +13,7 @@ class RestaurantReview(StatesGroup):
     rating = State()
     extra_comments = State()
     visit_date = State()
+
 
 rating_kb = InlineKeyboardMarkup(inline_keyboard=[
     [
@@ -30,21 +30,6 @@ def cancel_keyboard():
         [InlineKeyboardButton(text='cancel', callback_data='cancel')],
     ])
 
-def init_db():
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS database (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        name TEXT,
-        instagram_username TEXT,
-        rating INTEGER,
-        extra_comments TEXT,
-        visit_date TEXT
-    )''')
-    conn.commit()
-    conn.close()
 
 @review_router.callback_query(F.data=='review')
 async def start_review(call: types.CallbackQuery, state: FSMContext):
@@ -86,27 +71,10 @@ async def process_visit_date(m: types.Message, state: FSMContext):
         except ValueError:
             await m.answer("Invalid date format. Please use YYYY-MM-DD.")
             return
-    else:
-        visit_date = None
 
-    data = await state.get_data()
-    save_review(data, visit_date)
-    await m.answer("Thank you for your review! Your feedback has been saved.")
-    await state.clear()
-
-def save_review(data, visit_date):
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
-    cursor.execute('''
-    INSERT INTO database (name, instagram_username, rating, extra_comments, visit_date)
-    VALUES (?, ?, ?, ?, ?)
-    ''', (data['name'], data['instagram_username'], data['rating'], data['extra_comments'], visit_date))
-    conn.commit()
-    conn.close()
 
 @review_router.callback_query(F.data=='cancel')
 async def cancel_review(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer("Review process cancelled.", reply_markup=None)
     await state.clear()
 
-init_db()
