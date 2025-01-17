@@ -15,7 +15,6 @@ def __init__():
         visit_date TEXT
     )''')
 
-
 def save_review(data, visit_date):
     conn = sqlite3.connect('reviews.db')
     cursor = conn.cursor()
