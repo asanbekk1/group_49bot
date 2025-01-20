@@ -1,11 +1,12 @@
 from aiogram import Bot, Dispatcher
 from dotenv import dotenv_values
+from database import Database
 
 token = dotenv_values(".env")["BOT_TOKEN"]
 bot = Bot(token=token)
 dp = Dispatcher()
-
-names = ('name','aidar','igor')
+database = Database("db.sqlite3")
+# dp["database"] = database # инъекция зависимостей
 
 
 

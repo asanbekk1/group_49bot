@@ -1,10 +1,13 @@
-from aiogram import Router, types,F
+from aiogram import Router, types,F, types
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.filters import Command
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from datetime import datetime
 
+from pyexpat.errors import messages
+
+from bot_config import  database
 review_router = Router()
 
 class RestaurantReview(StatesGroup):
@@ -71,6 +74,9 @@ async def process_visit_date(m: types.Message, state: FSMContext):
         except ValueError:
             await m.answer("Invalid date format. Please use YYYY-MM-DD.")
             return
+        data= await state.get_data()
+        database.save_review(data,visit_date)
+        await m.answer('ur review has been accepted')
 
 
 @review_router.callback_query(F.data=='cancel')
