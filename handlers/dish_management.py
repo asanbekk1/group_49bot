@@ -1,5 +1,3 @@
-
-
 from aiogram import Router, F, types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.fsm.context import FSMContext
@@ -40,7 +38,7 @@ async def start_adding_dish(m: types.Message, state: FSMContext):
     await m.answer("Выберите категорию блюда:", reply_markup=category_keyboard())
     await state.set_state(DishForm.category)
 
-@admin_router.callback_query(lambda c: c.data.startswith('category:'))
+@admin_router.callback_query(DishForm.category)
 async def category_selected(call: CallbackQuery, state: FSMContext):
     category = call.data.split(':')[1]
     await state.update_data(category=category)
