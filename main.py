@@ -16,7 +16,7 @@ async def main():
     dp.include_router(random.random_router)
     dp.include_router(start.start_router)
     dp.include_router(review_dialog.review_router)
-    dp.include_router(dish_management.admin_router)
+    dp.include_router(dish_management.dish_router)
 
 
 
