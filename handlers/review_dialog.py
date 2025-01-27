@@ -9,7 +9,6 @@ from pyexpat.errors import messages
 
 from bot_config import  database
 review_router = Router()
-ADMIN_USER_ID = 123456789
 
 class RestaurantReview(StatesGroup):
     name = State()
@@ -85,18 +84,3 @@ async def cancel_review(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer("Review process cancelled.", reply_markup=None)
     await state.clear()
 
-
-@review_router.message(Command('recent_reviews'))
-async def recent_reviews(m: types.Message):
-    if m.from_user.id != ADMIN_USER_ID:
-        await m.answer("You do not have permission to view recent reviews.")
-        return
-
-    reviews = database.get_recent_reviews()
-
-    if reviews:
-        response = "\n".join([f"Review by {review[2]} on {review[6]}: {review[5]}" for review in reviews])
-    else:
-        response = "No reviews in the last 3 days."
-
-    await m.answer(response)
