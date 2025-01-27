@@ -67,7 +67,7 @@ class Database:
                 query += "image_url = ?, "
                 params.append(image_url)
 
-            query = query.rstrip(', ')  # Убираем последнюю запятую
+            query = query.rstrip(', ')
             query += " WHERE id = ?"
             params.append(dish_id)
             conn.execute(query, tuple(params))
