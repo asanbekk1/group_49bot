@@ -84,7 +84,7 @@ async def process_portion_sizes(m: types.Message, state: FSMContext):
 @dish_router.message(DishForm.photo)
 async def process_photo(m: types.Message, state: FSMContext):
     if m.photo:
-        file = await m.photo[1].download()
+        file = await m.photo[-1].download()
         photo_path = file.name
 
         await state.update_data(photo=photo_path)
