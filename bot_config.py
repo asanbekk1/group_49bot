@@ -7,4 +7,3 @@ bot = Bot(token=token)
 dp = Dispatcher()
 database = Database("db.sqlite3")
 # dp["database"] = database # инъекция зависимостей
-

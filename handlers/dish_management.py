@@ -84,29 +84,25 @@ async def process_portion_sizes(m: types.Message, state: FSMContext):
 @dish_router.message(DishForm.photo)
 async def process_photo(m: types.Message, state: FSMContext):
     if m.photo:
-        try:
-            file = await m.photo[-1].download()
-            photo_path = file.name
-            await state.update_data(photo=photo_path)
+        file = m.photo[-1].file_id
 
-            await m.answer("Фото успешно загружено! Теперь блюдо будет добавлено.")
+        await state.update_data(photo=file)
 
-            data = await state.get_data()
+        await m.answer("Фото успешно загружено! Блюдо будет добавлено в меню.")
 
-            database.save_dish(
-                data['name'],
-                data['price'],
-                data['description'],
-                data['category'],
-                data['portion_sizes'],
-                photo_path
-            )
+        data = await state.get_data()
 
-            await m.answer(f"Блюдо '{data['name']}' успешно добавлено в меню!")
+        database.save_dish(
+            data['name'],
+            data['price'],
+            data['description'],
+            data['category'],
+            data['portion_sizes'],
+            file
+        )
 
-            await state.clear()
-        except Exception as e:
-            await m.answer(f"Ошибка при загрузке фото: {str(e)}")
+        await m.answer(f"Блюдо '{data['name']}' успешно добавлено в меню!")
+        await state.clear()
     else:
         await m.answer("Пожалуйста, отправьте фото блюда.")
 
@@ -130,6 +126,7 @@ async def list_dishes(m: types.Message):
             if image_url:
                 response += f"Фото: {image_url}\n"
             response += "\n"
+
         await m.answer(response)
     else:
         await m.answer("Нет блюд в меню.")
